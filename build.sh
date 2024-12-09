@@ -24,7 +24,7 @@ export PATH="$PWD/toolchain/bin/:$PATH"
 export ARCH=arm64
 export KBUILD_BUILD_USER=ZyuxS
 export KBUILD_BUILD_HOST=Not-Gaming-Kernel
-export KBUILD_COMPILER_STRING="($PWD/clang/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
+export KBUILD_COMPILER_STRING="($PWD/toolchain/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 
 make mrproper 
 

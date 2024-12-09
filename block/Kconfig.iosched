@@ -55,6 +55,14 @@ config IOSCHED_TRIPNDROID
 	  it uses deadlines to ensure some fairness. The scheduler is build
 	  to keep a minimum overhead. It is mainly build for mobile devices.
 
+config IOSCHED_ANXIETY
+	tristate "Anxiety I/O scheduler"
+	default n
+	---help---
+	  The Anxiety I/O scheduler prioritizes latency over everything
+	  else. When a request comes in, it will use a lighweight
+	  selection algorithm to swiftly process the current pending task.
+	  
 choice
 
 	prompt "Default I/O scheduler"
@@ -77,7 +85,10 @@ choice
 
 	config DEFAULT_TRIPNDROID
 		bool "TD" if IOSCHED_TRIPNDROID=y
-
+    
+    config DEFAULT_ANXIETY
+		bool "Anxiety" if IOSCHED_ANXIETY=y
+		
 endchoice
 
 config DEFAULT_IOSCHED
@@ -87,6 +98,7 @@ config DEFAULT_IOSCHED
 	default "noop" if DEFAULT_NOOP
 	default "zen" if DEFAULT_ZEN
 	default "tripndroid" if DEFAULT_TRIPNDROID
+	default "anxiety" if DEFAULT_ANXIETY
 
 config MQ_IOSCHED_DEADLINE
 	tristate "MQ deadline I/O scheduler"

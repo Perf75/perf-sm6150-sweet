@@ -12,6 +12,7 @@
 #include <linux/security.h>
 #include <linux/fs_struct.h>
 #include <linux/sched/task.h>
+#include <linux/suspicious.h>
 
 #include "proc/internal.h" /* only for get_proc_task() in ->open() */
 
@@ -101,12 +102,12 @@ static int show_vfsmnt(struct seq_file *m, struct vfsmount *mnt)
 	struct path mnt_path = { .dentry = mnt->mnt_root, .mnt = mnt };
 	struct super_block *sb = mnt_path.dentry->d_sb;
 	int err;
-
-#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
-	if (unlikely(r->mnt.mnt_root->d_inode->i_state & 33554432))
-		return 0;
-#endif
-
+    
+    if (is_suspicious_mount(mnt, &p->root)) {
+		err = SEQ_SKIP;
+		goto out;
+	}
+	
 	if (sb->s_op->show_devname) {
 		err = sb->s_op->show_devname(m, mnt_path.dentry);
 		if (err)
@@ -142,12 +143,12 @@ static int show_mountinfo(struct seq_file *m, struct vfsmount *mnt)
 	struct super_block *sb = mnt->mnt_sb;
 	struct path mnt_path = { .dentry = mnt->mnt_root, .mnt = mnt };
 	int err;
-
-#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
-	if (unlikely(r->mnt.mnt_root->d_inode->i_state & 33554432))
-		return 0;
-#endif
-
+    
+    if (is_suspicious_mount(mnt, &p->root)) {
+		err = SEQ_SKIP;
+		goto out;
+	}
+	
 	seq_printf(m, "%i %i %u:%u ", r->mnt_id, r->mnt_parent->mnt_id,
 		   MAJOR(sb->s_dev), MINOR(sb->s_dev));
 	if (sb->s_op->show_path) {
@@ -211,12 +212,12 @@ static int show_vfsstat(struct seq_file *m, struct vfsmount *mnt)
 	struct path mnt_path = { .dentry = mnt->mnt_root, .mnt = mnt };
 	struct super_block *sb = mnt_path.dentry->d_sb;
 	int err;
-
-#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
-	if (unlikely(r->mnt.mnt_root->d_inode->i_state & 33554432))
-		return 0;
-#endif
-
+    
+    if (is_suspicious_mount(mnt, &p->root)) {
+		err = SEQ_SKIP;
+		goto out;
+	}
+	
 	/* device */
 	if (sb->s_op->show_devname) {
 		seq_puts(m, "device ");

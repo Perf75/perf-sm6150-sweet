@@ -365,6 +365,12 @@ extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int
  * switching the fsuid/fsgid around to the real ones.
  */
 
+#ifdef CONFIG_KSU_SUSFS_SUS_SU
+extern bool susfs_is_sus_su_hooks_enabled __read_mostly;
+extern int ksu_handle_faccessat(int *dfd, const char __user **filename_user, int *mode,
+			int *flags);
+#endif
+
 SYSCALL_DEFINE3(faccessat, int, dfd, const char __user *, filename, int, mode)
 {
 	const struct cred *old_cred;
@@ -377,6 +383,12 @@ SYSCALL_DEFINE3(faccessat, int, dfd, const char __user *, filename, int, mode)
 	
 #ifdef CONFIG_KSU
 	ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
+#endif
+
+#ifdef CONFIG_KSU_SUSFS_SUS_SU
+	if (susfs_is_sus_su_hooks_enabled) {
+		ksu_handle_faccessat(&dfd, &filename, &mode, NULL);
+	}
 #endif
 
 	if (mode & ~S_IRWXO)	/* where's F_OK, X_OK, W_OK, R_OK? */

@@ -7,6 +7,8 @@
 rm -rf out/
 
 if [ ! -d "KernelSU" ]; then
+ git clone https://github.com/backslashxx/KernelSU.git -b magic-152
+else
 curl -LSs "https://raw.githubusercontent.com/backslashxx/KernelSU/magic-152/kernel/setup.sh" | bash -s main
 fi
 

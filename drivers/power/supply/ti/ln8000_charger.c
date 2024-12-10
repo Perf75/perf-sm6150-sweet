@@ -1447,7 +1447,7 @@ static int ln8000_get_dev_role(struct i2c_client *client)
     return (int)of_id->data;
 }
 
-static int ln8000_parse_dt(struct ln8000_info *info)
+staotic int ln8000_parse_dt(struct ln8000_info *info)
 {
     struct device *dev = info->dev;
     struct ln8000_platform_data *pdata = info->pdata;

@@ -7,7 +7,7 @@
 rm -rf out/
 
 if [ ! -d "KernelSU" ]; then
-curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s main
+curl -LSs "https://raw.githubusercontent.com/backslashxx/KernelSU/magic-152/kernel/setup.sh" | bash -s main
 fi
 
 # KERNEL ZIP

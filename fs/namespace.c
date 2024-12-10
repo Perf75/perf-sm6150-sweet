@@ -3816,3 +3816,4 @@ void susfs_run_try_umount_for_current_mnt_ns(void) {
 	namespace_unlock();
 	susfs_try_umount_all(current_uid().val);
 }
+#endif

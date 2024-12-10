@@ -7,14 +7,11 @@
 rm -rf out/
 
 if [ ! -d "KernelSU" ]; then
-curl -LSs "https://raw.githubusercontent.com/backslashxx/KernelSU/magic-152/kernel/setup.sh" | bash -s main
+curl -LSs "https://raw.githubusercontent.com/rsuntk/KernelSU/main/kernel/setup.sh" | bash -s main
 fi
 
 # KERNEL ZIP
 ZIPNAME="sweet-$(date '+%Y%m%d-%H%M').zip"
-
-# DEFCONFIG
-KERNEL_DEFCONFIG=vendor/sweet
 
 # Speed up build proces
 MAKE="./makeparallel"
@@ -23,12 +20,10 @@ MAKE="./makeparallel"
 export PATH="$PWD/toolchain/bin/:$PATH"
 export ARCH=arm64
 export KBUILD_BUILD_USER=ZyuxS
-export KBUILD_BUILD_HOST=Not-Gaming-Kernel
+export KBUILD_BUILD_HOST=Dumps
 export KBUILD_COMPILER_STRING="($PWD/toolchain/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 
-make mrproper 
-
-make O=out ARCH=arm64 $KERNEL_DEFCONFIG
+make O=out ARCH=arm64 vendor/sweet_defconfig
 make -j$(nproc --all) \ O=out \ ARCH=arm64 \ LLVM=1 \ LLVM_IAS=1 \ AR=llvm-ar \ NM=llvm-nm \ LD=ld.lld \ OBJCOPY=llvm-objcopy \ OBJDUMP=llvm-objdump \ STRIP=llvm-strip \ CC=clang \ CROSS_COMPILE=aarch64-linux-gnu- \ CROSS_COMPILE_ARM32=arm-linux-gnueabi- 2>&1 | tee log.txt
 
 kernel="out/arch/arm64/boot/Image.gz"
@@ -62,5 +57,5 @@ rm -rf AnyKernel3/dtbo.img
 rm -rf AnyKernel3/dtb.img
 
 echo -e "\nCompleted in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
-echo "Zip: $ZIPNAME"
+echo " Zip: $ZIPNAME"
 

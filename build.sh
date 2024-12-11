@@ -3,11 +3,8 @@
 # Compile script for kernel sweet
 #
 
-# mproper
-make mrproper
-
-# Delet out folder 
-rm -rf out/
+# zipping kernel
+ZIPNAME="sweet-$(date '+%Y%m%d-%H%M').zip"
 
 # Download AOSP Clang 19.0.1 r536225
 mkdir toolchain && cd toolchain && wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r536225.tar.gz && tar -xzf clang-r536225.tar.gz && rm -rf clang-r536225.tar.gz && cd ..
@@ -26,7 +23,7 @@ export PATH="$PWD/toolchain/bin/:$PATH"
 export ARCH=arm64
 export KBUILD_BUILD_USER=ZyuxS
 export KBUILD_BUILD_HOST=Github-Action
-export KBUILD_COMPILER_STRING="$PWD/toolchain/bin"
+export KBUILD_COMPILER_STRING="$PWD/toolchain"
 
 make O=out ARCH=arm64 vendor/sweet_defconfig
 make -j$(nproc --all) \ 
@@ -41,7 +38,6 @@ make -j$(nproc --all) \
         OBJDUMP=llvm-objdump \ 
         STRIP=llvm-strip \ 
         CC=clang \ 
-        CLANG_TRIPLE=aarch64-linux-gnu- \ 
         CROSS_COMPILE=aarch64-linux-gnu- \ 
         CROSS_COMPILE_ARM32=arm-linux-gnueabi- 2>&1 | tee log.txt
 
@@ -72,8 +68,6 @@ cd AnyKernel3
 zip -r9 "../$ZIPNAME" * -x .git
 cd ..
 rm -rf AnyKernel3
-
-ZIPNAME="sweet-$(date '+%Y%m%d-%H%M').zip"
 
 echo -e "\nCompleted in $((SECONDS / 60)) minute(s) and $((SECONDS % 60)) second(s) !"
 echo " Zip: $ZIPNAME"

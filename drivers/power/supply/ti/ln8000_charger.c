@@ -1444,10 +1444,10 @@ static int ln8000_get_dev_role(struct i2c_client *client)
 
     dev_info(&client->dev,"%s: matched to %s\n", __func__, of_id->compatible);
 
-    return (int)of_id->data;
+    return (long)of_id->data;
 }
 
-staotic int ln8000_parse_dt(struct ln8000_info *info)
+static int ln8000_parse_dt(struct ln8000_info *info)
 {
     struct device *dev = info->dev;
     struct ln8000_platform_data *pdata = info->pdata;

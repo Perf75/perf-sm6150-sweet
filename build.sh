@@ -2,12 +2,17 @@
 #
 # Compile script for kernel sweet
 #
+# Dependency Ubuntu 22.0.4
+sudo apt update && sudo apt upgrade -y && sudo apt install dialog rlwrap apt-utils -y && sudo apt install nano bc bison ca-certificates curl flex gcc git libc6-dev libssl-dev openssl python-is-python3 ssh wget zip zstd sudo make clang gcc-arm-linux-gnueabi software-properties-common build-essential libarchive-tools gcc-aarch64-linux-gnu -y && sudo apt install build-essential -y && sudo apt install libssl-dev libffi-dev libncurses5-dev zlib1g zlib1g-dev libreadline-dev libbz2-dev libsqlite3-dev make gcc -y && sudo apt install pigz -y && sudo apt install python2 -y && sudo apt install python3 -y && sudo apt install cpio -y && sudo apt install lld -y && sudo apt install llvm -y && sudo apt-get install g++-aarch64-linux-gnu -y && sudo apt install libelf-dev -y && sudo apt install neofetch -y && neofetch
+
+# Google Clang 19.0.1 
+mkdir toolchain && cd toolchain && wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main/clang-r536225.tar.gz && tar -xzf clang-r536225.tar.gz && rm -rf clang-r536225.tar.gz && cd ..
 
 # Delet out folder 
 rm -rf out/
 
 if [ ! -d "KernelSU" ]; then
- git clone https://github.com/backslashxx/KernelSU.git -b magic-152
+git clone https://github.com/backslashxx/KernelSU.git -b magic-152
 else
 curl -LSs "https://raw.githubusercontent.com/backslashxx/KernelSU/magic-152/kernel/setup.sh" | bash -s main
 fi
@@ -22,7 +27,7 @@ MAKE="./makeparallel"
 export PATH="$PWD/toolchain/bin/:$PATH"
 export ARCH=arm64
 export KBUILD_BUILD_USER=ZyuxS
-export KBUILD_BUILD_HOST=Dumps
+export KBUILD_BUILD_HOST=Github-Action
 export KBUILD_COMPILER_STRING="($PWD/toolchain/bin/clang --version | head -n 1 | perl -pe 's/\(http.*?\)//gs' | sed -e 's/  */ /g' -e 's/[[:space:]]*$//')"
 
 make O=out ARCH=arm64 vendor/sweet_defconfig
@@ -40,7 +45,7 @@ fi
 echo -e "\nKernel compiled successfully! Zipping up...\n"
 
 if [ ! -d "AnyKernel3" ]; then
-git clone  --depth=1 https://github.com/Zeux775/AnyKernel3.git -b master AnyKernel3
+git clone  --depth=1 https://github.com/Perf75/Anykernel3.git -b master AnyKernel3
 fi
 
 # Modify anykernel.sh to replace device names

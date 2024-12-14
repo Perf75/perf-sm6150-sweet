@@ -1447,8 +1447,6 @@ static void bq2597x_parse_cmdline(struct bq2597x *bq)
 		bq->mass_production = false;
 	}
 
-	bq->hw_version = get_hw_version_platform();
-
 	pr_info("hw_version = %d, mass_production = %d\n", bq->hw_version, bq->mass_production);
 }
 

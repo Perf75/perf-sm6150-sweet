@@ -22,13 +22,13 @@
 
 #define SUGOV_KTHREAD_PRIORITY	50
 
-#define UP_RATE_LIMIT_US		(4000)
-#define DOWN_RATE_LIMIT_US		(36000)
+#define UP_RATE_LIMIT_US		(16000)
+#define DOWN_RATE_LIMIT_US		(2000)
 
-static unsigned int default_efficient_freq_lp[] = {1612800, 1708800};
+static unsigned int default_efficient_freq_lp[] = {1324800, 1612800, 1708800};
 static u64 default_up_delay_lp[] = {50 * NSEC_PER_MSEC, 60 * NSEC_PER_MSEC, 100 * NSEC_PER_MSEC};
 
-static unsigned int default_efficient_freq_hp[] = {2169600, 2208000};
+static unsigned int default_efficient_freq_hp[] = {1843200, 2169600, 2208000};
 static u64 default_up_delay_hp[] = {50 * NSEC_PER_MSEC, 60 * NSEC_PER_MSEC, 100 * NSEC_PER_MSEC};
 
 struct sugov_tunables {
@@ -793,7 +793,7 @@ static struct sugov_policy *sugov_policy_alloc(struct cpufreq_policy *policy)
 	return sg_policy;
 }
 
-static void sugov_policy_free(struct sugov_policy *sg_policy)
+static inline void sugov_policy_free(struct sugov_policy *sg_policy)
 {
 	kfree(sg_policy);
 }
